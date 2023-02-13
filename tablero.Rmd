@@ -24,6 +24,7 @@ library(paqueteMET)
 
 data("CarreraLuz22")
 
+  
 Theme2 = theme(
   axis.title.x = element_text(size = 8),
   axis.text.x = element_text(size = 8),
@@ -73,18 +74,16 @@ Column {data-width=700 .tabset}
 ### Tiempos de carrera
 
 ```{r}
-paleta6=c("#447270", "#6B9493", "#F6E271", "#F6B916", "#F69312", "#BC6C25")
-p1=ggplot(CarreraLuz22F, aes(y=timerun/60, x=categoria))+
+paleta6=c("#447270", "#6B9493", "#F6E271", "#F6B916", "#F69312", "#BC6C25", "#002b33")
+
+p1=ggplot(CarreraLuz22, aes(y=timerun/60, x=categoria))+
   geom_jitter(color="#034A94", size=1, alpha=0.9) +
   aes(color=paleta6)+
   labs(title = " ",
-       y= "tiempo - min",
-       x= "categorías")+ 
-  #facet_wrap(~ sex)
-  #facet_grid(vars(sex), scale="free")+
+       y= "tiempo - Minutos",
+       x= "Categorías")+ 
   ylim(0,170)+
   Theme2
-
 p1
 
 ```
@@ -94,10 +93,8 @@ p1
 ```{r, fig.height=3}
 ggplot(CarreraLuz22M, aes(x = categoria, y = timerun/60 )) +
   geom_boxplot(aes(fill = categoria)) + 
-  # facet_wrap(~sex, ncol=1, labeller = labeller(dose = etiquetas))+
   labs(title = "", y= "tiempo - min", x= "categorías")+
   scale_fill_brewer() +
-  #scale_fill_manual(values = c("#00070D", "#012447", "#034A94", "#0570E1", "#3998FB","#37B6FC"))+
   theme(legend.position = "none")
 t2h
 ```
@@ -106,11 +103,9 @@ t2h
 ```{r, fig.height=3}
 ggplot(CarreraLuz22F, aes(x = categoria, y = timerun/60 )) +
   geom_boxplot(aes(fill = categoria)) + 
-  # facet_wrap(~sex, ncol=1, labeller = labeller(dose = etiquetas))+
   labs(title = "", y= "tiempo - min", x= "categorías")+
   scale_fill_brewer() +
-  #scale_fill_manual(values = c("#00070D", "#012447", "#034A94", "#0570E1", "#3998FB","#37B6FC"))+
-  theme(legend.position = "none")
+  theme(legend.position = "bottom")
 t2m
 ```
 
@@ -132,25 +127,29 @@ Column {data-width=400}
 ```{r}
 # seleccion de bases
 dataFc2=subset(CarreraLuz22, (CarreraLuz22$sex=="Mujer" & CarreraLuz22$categoria=="2. Abierta")) # dataset de mujeres
-x=dataFc2$timerun/60
-hist(x, xlim=c(30,120), ylim=c(0,80),las=1,
-main = " ",
-xlab="tiempo (min)",
-ylab = "frecuencia",
-col ="#ee964b")
+w =dataFc2$timerun/60
+hist(w, xlim=c(30,120), ylim=c(0,80),las=1,
+  main = " ",
+    xlab="Tiempo (min)",
+    ylab = "Frecuencia",
+    col ="#ee964b")
 ```
 
 ### Tiempo hombres categoría Abierta
 
 ```{r}
 # seleccion de bases
-dataMc2=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre" & CarreraLuz22$categoria=="2. Abierta")) # dataset de mujeres
+
+dataMc2=subset(CarreraLuz22, (CarreraLuz22$sex=="Hombre" & CarreraLuz22$categoria=="2. Abierta")) # Dataset de Hombres
 x=dataMc2$timerun/60
-hist(x, xlim=c(30,120), ylim=c(0,250),las=1,
-main = " ",
-xlab="tiempo (min)",
-ylab = "frecuencia",
-col ="#ee964b")
+hist(x, ylim=c(0,250))
+h = hist(x)
+text(h$mids,h$counts,labels=h$counts, adj=c(0.1, -0.1), vjust = -1)
+
+axis(1) # Añade el eje horizontal
+par(new = TRUE)
+boxplot(x, horizontal = TRUE, axes = FALSE,
+        lwd = 2, col = rgb(0, 0, 0, alpha = 0.2))
 ```
 
 Column { data-width=50 }
